@@ -5,8 +5,6 @@ export default class CartIcon {
     this.render();
 
     this.addEventListeners();
-
-    this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
   }
 
   render() {
@@ -41,23 +39,20 @@ export default class CartIcon {
   }
 
   updatePosition() {
+    if (!this.elem.offsetHeight || window.pageYOffset < this.elem.offsetTop) {
+      return;
+    }
 
-    if (!this.elem.offsetHeight || document.scrollTop < this.elem.offsetTop) return;
-
-    if (window.pageYOffset > this.initialTopCoord) {
+    if (document.documentElement.clientWidth >= 767) { // to calculate initial top coordinate !!!
       this.elem.style.position = 'fixed';
+      this.elem.style.zIndex = '1000';
       this.elem.style.top = '50px';
       this.elem.style.right = '10px';
-      this.elem.style.left = Math.min(
+      this.elem.style.left = `${Math.min(
         document.querySelector('.container').getBoundingClientRect().right + 20,
-        document.documentElement.clientWidth - this.elem.offsetWidth - 10);
+        document.documentElement.clientWidth - this.elem.offsetWidth - 10)}px`;
     } else {
       this.elem.style.position = 'absolute';
     }
-
-
-
-    console.log('update position');
-
   }
 }
